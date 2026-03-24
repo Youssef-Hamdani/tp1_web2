@@ -10,11 +10,13 @@ final class View
 {
     private string $viewsPath;
     private string $appName;
+    private array $imageCredits;
 
-    public function __construct(string $viewsPath, string $appName)
+    public function __construct(string $viewsPath, string $appName, array $imageCredits = array())
     {
         $this->viewsPath = rtrim($viewsPath, DIRECTORY_SEPARATOR);
         $this->appName = $appName;
+        $this->imageCredits = $imageCredits;
     }
 
     public function render(string $template, array $data = array()): void
@@ -22,6 +24,8 @@ final class View
         $contentTemplate = $this->resolvePath($template);
         $title = $data['title'] ?? $this->appName;
         $appName = $this->appName;
+        $imageCredits = $this->imageCredits;
+        $ui = new Ui();
 
         extract($data, EXTR_SKIP);
 
@@ -39,4 +43,3 @@ final class View
         return $path;
     }
 }
-

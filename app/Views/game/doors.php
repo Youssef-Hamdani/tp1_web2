@@ -3,20 +3,20 @@
         <div class="brand-line">
             <div class="brand-mark">C</div>
             <div>
-                <h1>Chatssassins</h1>
-                <p>Choisissez une porte... un chien se cache derrière l'une d'elles</p>
+                <h1>Nuit des Neuf Vies</h1>
+                <p>Choisissez une porte... un gardien canin se cache derrière l'une d'elles</p>
             </div>
         </div>
     </div>
 
-    <form method="post" action="<?= e(url('logout')) ?>">
+    <form method="post" action="<?= $ui->e($ui->url('logout')) ?>">
         <button type="submit" class="button button-ghost">Déconnexion</button>
     </form>
 </section>
 
 <?php if ($feedback !== null) : ?>
-    <div class="notice notice-<?= e($feedback['tone'] === 'danger' ? 'danger' : 'success') ?>">
-        <?= e($feedback['text']) ?>
+    <div class="notice notice-<?= $ui->e($feedback['tone'] === 'danger' ? 'danger' : 'success') ?>">
+        <?= $ui->e($feedback['text']) ?>
     </div>
 <?php endif; ?>
 
@@ -26,7 +26,7 @@
         <p>Chaque porte ne peut être ouverte qu'une seule fois.</p>
     </div>
 
-    <form method="post" action="<?= e(url('open-door')) ?>" class="stack">
+    <form method="post" action="<?= $ui->e($ui->url('open-door')) ?>" class="stack">
         <div class="choice-grid choice-grid-doors">
             <?php $selected = false; ?>
             <?php foreach ($game['doors'] as $door) : ?>
@@ -34,13 +34,13 @@
                     <input
                         type="radio"
                         name="door_number"
-                        value="<?= e((string) $door['number']) ?>"
+                        value="<?= $ui->e((string) $door['number']) ?>"
                         <?= (! $door['opened'] && ! $selected) ? 'checked' : '' ?>
                         <?= $door['opened'] ? 'disabled' : '' ?>
                     >
                     <span class="choice-card-body choice-card-door-body">
                         <span class="door-icon"><?= $door['opened'] ? '✓' : '🚪' ?></span>
-                        <strong><?= e((string) $door['number']) ?></strong>
+                        <strong><?= $ui->e((string) $door['number']) ?></strong>
                         <span><?= $door['opened'] ? 'Déjà ouverte' : 'Mystère' ?></span>
                     </span>
                 </label>
@@ -53,4 +53,3 @@
         <button type="submit" class="button button-primary button-block">Ouvrir la porte</button>
     </form>
 </section>
-

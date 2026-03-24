@@ -9,9 +9,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-require __DIR__ . '/helpers.php';
 require __DIR__ . '/Core/Autoloader.php';
 
 $autoloader = new App\Core\Autoloader(__DIR__);
 $autoloader->register();
-

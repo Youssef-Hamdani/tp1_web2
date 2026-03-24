@@ -1,19 +1,19 @@
 <section class="hero">
     <div>
         <h1>Combat</h1>
-        <p><?= e($game['player']['name']) ?> contre <?= e($game['combat']['monster']['name']) ?> — que le meilleur gagne!</p>
+        <p><?= $ui->e($game['player']['name']) ?> contre <?= $ui->e($game['combat']['monster']['name']) ?> — que le meilleur gagne!</p>
     </div>
 
-    <form method="post" action="<?= e(url('logout')) ?>">
+    <form method="post" action="<?= $ui->e($ui->url('logout')) ?>">
         <button type="submit" class="button button-ghost">Déconnexion</button>
     </form>
 </section>
 
-<section class="stack" id="combat-app" data-end-url="<?= e(url('end')) ?>" data-api-url="<?= e(url('api-combat')) ?>">
+<section class="stack" id="combat-app" data-end-url="<?= $ui->e($ui->url('end')) ?>" data-api-url="<?= $ui->e($ui->url('api-combat')) ?>">
     <div class="message-stack" id="combat-logs">
         <?php foreach ($game['combat']['logs'] as $log) : ?>
-            <div class="notice notice-<?= e($log['tone'] === 'danger' ? 'danger' : 'success') ?>">
-                <?= e($log['text']) ?>
+            <div class="notice notice-<?= $ui->e($log['tone'] === 'danger' ? 'danger' : 'success') ?>">
+                <?= $ui->e($log['text']) ?>
             </div>
         <?php endforeach; ?>
     </div>
@@ -21,41 +21,41 @@
     <div class="combat-grid">
         <article class="panel combat-card">
             <div class="combat-card-head">
-                <img src="<?= e(asset($game['player']['image'])) ?>" alt="<?= e($game['player']['name']) ?>" class="avatar">
+                <img src="<?= $ui->e($ui->asset($game['player']['image'])) ?>" alt="<?= $ui->e($game['player']['name']) ?>" class="avatar">
                 <div>
-                    <h2 id="player-name"><?= e($game['player']['name']) ?></h2>
-                    <p><?= e($game['player']['title']) ?></p>
+                    <h2 id="player-name"><?= $ui->e($game['player']['name']) ?></h2>
+                    <p><?= $ui->e($game['player']['title']) ?></p>
                 </div>
             </div>
 
             <dl class="stats-list">
-                <div><dt>Force</dt><dd id="player-force"><?= e((string) $game['player']['force']) ?></dd></div>
-                <div><dt>Défense</dt><dd id="player-defense"><?= e((string) $game['player']['defense']) ?></dd></div>
-                <div><dt>Vie</dt><dd id="player-hp-label"><?= e((string) $game['player']['hp']) ?> / <?= e((string) $game['player']['max_hp']) ?></dd></div>
+                <div><dt>Force</dt><dd id="player-force"><?= $ui->e((string) $game['player']['force']) ?></dd></div>
+                <div><dt>Défense</dt><dd id="player-defense"><?= $ui->e((string) $game['player']['defense']) ?></dd></div>
+                <div><dt>Vie</dt><dd id="player-hp-label"><?= $ui->e((string) $game['player']['hp']) ?> / <?= $ui->e((string) $game['player']['max_hp']) ?></dd></div>
             </dl>
 
             <div class="health-bar">
-                <span id="player-hp-bar" style="width: <?= e((string) max(0, min(100, (int) round(($game['player']['hp'] / max(1, $game['player']['max_hp'])) * 100)))) ?>%;"></span>
+                <span id="player-hp-bar" style="width: <?= $ui->e((string) max(0, min(100, (int) round(($game['player']['hp'] / max(1, $game['player']['max_hp'])) * 100)))) ?>%;"></span>
             </div>
         </article>
 
         <article class="panel combat-card">
             <div class="combat-card-head">
-                <img src="<?= e(asset($game['combat']['monster']['image'])) ?>" alt="<?= e($game['combat']['monster']['name']) ?>" class="avatar">
+                <img src="<?= $ui->e($ui->asset($game['combat']['monster']['image'])) ?>" alt="<?= $ui->e($game['combat']['monster']['name']) ?>" class="avatar">
                 <div>
-                    <h2 id="monster-name"><?= e($game['combat']['monster']['name']) ?></h2>
-                    <p><?= e($game['combat']['monster']['description']) ?></p>
+                    <h2 id="monster-name"><?= $ui->e($game['combat']['monster']['name']) ?></h2>
+                    <p><?= $ui->e($game['combat']['monster']['description']) ?></p>
                 </div>
             </div>
 
             <dl class="stats-list">
-                <div><dt>Force</dt><dd id="monster-force"><?= e((string) $game['combat']['monster']['force']) ?></dd></div>
-                <div><dt>Défense</dt><dd id="monster-defense"><?= e((string) $game['combat']['monster']['defense']) ?></dd></div>
-                <div><dt>Vie</dt><dd id="monster-hp-label"><?= e((string) $game['combat']['monster']['hp']) ?> / <?= e((string) $game['combat']['monster']['max_hp']) ?></dd></div>
+                <div><dt>Force</dt><dd id="monster-force"><?= $ui->e((string) $game['combat']['monster']['force']) ?></dd></div>
+                <div><dt>Défense</dt><dd id="monster-defense"><?= $ui->e((string) $game['combat']['monster']['defense']) ?></dd></div>
+                <div><dt>Vie</dt><dd id="monster-hp-label"><?= $ui->e((string) $game['combat']['monster']['hp']) ?> / <?= $ui->e((string) $game['combat']['monster']['max_hp']) ?></dd></div>
             </dl>
 
             <div class="health-bar">
-                <span id="monster-hp-bar" style="width: <?= e((string) max(0, min(100, (int) round(($game['combat']['monster']['hp'] / max(1, $game['combat']['monster']['max_hp'])) * 100)))) ?>%;"></span>
+                <span id="monster-hp-bar" style="width: <?= $ui->e((string) max(0, min(100, (int) round(($game['combat']['monster']['hp'] / max(1, $game['combat']['monster']['max_hp'])) * 100)))) ?>%;"></span>
             </div>
         </article>
     </div>
@@ -149,4 +149,3 @@ actionButtons.forEach(function (button) {
 
 powerButton.dataset.available = powerButton.disabled ? 'false' : 'true';
 </script>
-

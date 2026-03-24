@@ -30,7 +30,7 @@ abstract class Controller
 
     protected function redirect(string $page = '', array $params = array()): void
     {
-        header('Location: ' . url($page, $params));
+        header('Location: ' . Url::page($page, $params));
         exit;
     }
 

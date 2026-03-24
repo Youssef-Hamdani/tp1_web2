@@ -11,6 +11,7 @@ final class GameSessionService
 {
     private const USER_KEY = 'auth_user';
     private const GAME_KEY = 'active_game';
+    private const GAME_VERSION = 2;
 
     public function isAuthenticated(): bool
     {
@@ -45,7 +46,15 @@ final class GameSessionService
 
     public function getGame(): ?array
     {
-        return $_SESSION[self::GAME_KEY] ?? null;
+        $game = $_SESSION[self::GAME_KEY] ?? null;
+
+        if ($game !== null && (($game['version'] ?? 0) !== self::GAME_VERSION)) {
+            $this->clearGame();
+
+            return null;
+        }
+
+        return $game;
     }
 
     public function saveGame(array $game): void
@@ -84,6 +93,7 @@ final class GameSessionService
     public function startNewGame(CharacterDefinition $character): array
     {
         $game = array(
+            'version' => self::GAME_VERSION,
             'status' => 'doors',
             'player' => $character->createState(),
             'doors' => $this->generateDoors(),
@@ -155,4 +165,3 @@ final class GameSessionService
         return $effects[array_rand($effects)];
     }
 }
-

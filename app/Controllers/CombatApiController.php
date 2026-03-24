@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Flash;
+use App\Core\Url;
 use App\Core\View;
 use App\Domain\Characters\CharacterCatalog;
 use App\Services\CombatService;
@@ -65,7 +66,7 @@ final class CombatApiController extends Controller
             array(
                 'ok' => true,
                 'finished' => ($updatedGame['status'] ?? '') === 'finished',
-                'redirectUrl' => ($updatedGame['status'] ?? '') === 'finished' ? url('end') : null,
+                'redirectUrl' => ($updatedGame['status'] ?? '') === 'finished' ? Url::page('end') : null,
                 'player' => $updatedGame['player'],
                 'monster' => $updatedGame['combat']['monster'],
                 'logs' => $updatedGame['combat']['logs'],
@@ -74,4 +75,3 @@ final class CombatApiController extends Controller
         );
     }
 }
-

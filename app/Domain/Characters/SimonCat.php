@@ -15,17 +15,17 @@ final class SimonCat extends CharacterDefinition
 
     public function getName(): string
     {
-        return "Simon's Cat";
+        return 'Minuit';
     }
 
     public function getTitle(): string
     {
-        return 'Agile et rusé';
+        return 'Ombre rapide';
     }
 
     public function getImagePath(): string
     {
-        return 'images/characters/simon-cat.svg';
+        return 'images/characters/minuit.jpg';
     }
 
     public function getBaseForce(): int
@@ -45,7 +45,7 @@ final class SimonCat extends CharacterDefinition
 
     public function getPowerName(): string
     {
-        return 'Pas de côté';
+        return 'Pas nocturne';
     }
 
     public function getPowerDescription(): string

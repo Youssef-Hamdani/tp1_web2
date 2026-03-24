@@ -41,8 +41,8 @@ final class DatabaseInitializer
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
 
-        if ($this->monsterRepository->count() > 0) {
-            return;
+        if ($this->shouldRefreshMonsters()) {
+            $this->pdo->exec('TRUNCATE TABLE monsters');
         }
 
         $this->monsterRepository->seed(
@@ -50,15 +50,15 @@ final class DatabaseInitializer
                 array(
                     'name' => 'Chihuahua',
                     'description' => 'Petit, nerveux et imprévisible.',
-                    'image_path' => 'images/monsters/chihuahua.svg',
+                    'image_path' => 'images/monsters/chihuahua.jpg',
                     'attack_power' => 22,
                     'armor' => 9,
                     'hp' => 24,
                 ),
                 array(
-                    'name' => 'Doge',
+                    'name' => 'Shiba Inu',
                     'description' => 'Un rival majestueux à la mâchoire solide.',
-                    'image_path' => 'images/monsters/doge.svg',
+                    'image_path' => 'images/monsters/shiba.jpg',
                     'attack_power' => 20,
                     'armor' => 12,
                     'hp' => 28,
@@ -66,7 +66,7 @@ final class DatabaseInitializer
                 array(
                     'name' => 'Corgi',
                     'description' => 'Bas sur pattes, mais très résistant.',
-                    'image_path' => 'images/monsters/corgi.svg',
+                    'image_path' => 'images/monsters/corgi.jpg',
                     'attack_power' => 17,
                     'armor' => 15,
                     'hp' => 30,
@@ -74,12 +74,28 @@ final class DatabaseInitializer
                 array(
                     'name' => 'Husky',
                     'description' => 'Rapide, bruyant et capable de gros dégâts.',
-                    'image_path' => 'images/monsters/husky.svg',
+                    'image_path' => 'images/monsters/husky.jpg',
                     'attack_power' => 24,
                     'armor' => 10,
                     'hp' => 26,
                 ),
             )
         );
+    }
+
+    private function shouldRefreshMonsters(): bool
+    {
+        $row = $this->pdo->query(
+            "SELECT
+                COUNT(*) AS total,
+                SUM(CASE WHEN image_path LIKE '%.svg' THEN 1 ELSE 0 END) AS svg_count
+             FROM monsters"
+        )->fetch();
+
+        if ($row === false) {
+            return true;
+        }
+
+        return (int) $row['total'] !== 4 || (int) $row['svg_count'] > 0;
     }
 }

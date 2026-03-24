@@ -1,8 +1,8 @@
 <section class="auth-shell">
     <header class="hero hero-center">
         <div class="brand-mark">C</div>
-        <h1>Chatssassins</h1>
-        <p>Créez votre compte avant d'entrer dans le couloir des portes.</p>
+        <h1>Nuit des Neuf Vies</h1>
+        <p>Créez votre compte avant d'affronter les pièges et les chiens de garde.</p>
     </header>
 
     <section class="panel auth-panel">
@@ -12,13 +12,13 @@
         </div>
 
         <?php if (! empty($error)) : ?>
-            <div class="notice notice-danger"><?= e($error) ?></div>
+            <div class="notice notice-danger"><?= $ui->e($error) ?></div>
         <?php endif; ?>
 
-        <form method="post" action="<?= e(url('register')) ?>" class="stack">
+        <form method="post" action="<?= $ui->e($ui->url('register')) ?>" class="stack">
             <label class="field">
                 <span>Nom d'utilisateur</span>
-                <input type="text" name="username" value="<?= e($old['username'] ?? '') ?>" autocomplete="username" required>
+                <input type="text" name="username" value="<?= $ui->e($old['username'] ?? '') ?>" autocomplete="username" required>
             </label>
 
             <label class="field">
@@ -36,8 +36,7 @@
 
         <p class="switch-link">
             Déjà inscrit?
-            <a href="<?= e(url('login')) ?>">Se connecter</a>
+            <a href="<?= $ui->e($ui->url('login')) ?>">Se connecter</a>
         </p>
     </section>
 </section>
-

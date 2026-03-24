@@ -24,7 +24,7 @@ final class Application
     public function __construct(array $config)
     {
         $pdo = Database::connect($config['database']);
-        $view = new View($config['views_path'], $config['app_name']);
+        $view = new View($config['views_path'], $config['app_name'], $config['image_credits'] ?? array());
         $flash = new Flash();
         $this->gameSession = new GameSessionService();
         $characterCatalog = new CharacterCatalog();
@@ -51,7 +51,7 @@ final class Application
                 return;
             }
 
-            header('Location: ' . url($this->gameSession->currentGamePage()));
+            header('Location: ' . Url::page($this->gameSession->currentGamePage()));
             exit;
         }
 

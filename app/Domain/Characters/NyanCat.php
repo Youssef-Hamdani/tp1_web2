@@ -15,17 +15,17 @@ final class NyanCat extends CharacterDefinition
 
     public function getName(): string
     {
-        return 'Nyan Cat';
+        return 'Nova';
     }
 
     public function getTitle(): string
     {
-        return 'Rapide et coloré';
+        return 'Étoile filante';
     }
 
     public function getImagePath(): string
     {
-        return 'images/characters/nyan-cat.svg';
+        return 'images/characters/nova.jpg';
     }
 
     public function getBaseForce(): int
@@ -45,7 +45,7 @@ final class NyanCat extends CharacterDefinition
 
     public function getPowerName(): string
     {
-        return 'Arc-en-ciel';
+        return 'Éclair astral';
     }
 
     public function getPowerDescription(): string
@@ -86,4 +86,3 @@ final class NyanCat extends CharacterDefinition
         );
     }
 }
-

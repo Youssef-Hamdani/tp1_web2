@@ -15,17 +15,17 @@ final class NononoCat extends CharacterDefinition
 
     public function getName(): string
     {
-        return 'Nonono Cat';
+        return 'Safran';
     }
 
     public function getTitle(): string
     {
-        return 'Féroce et tenace';
+        return 'Griffes obstinées';
     }
 
     public function getImagePath(): string
     {
-        return 'images/characters/nonono-cat.svg';
+        return 'images/characters/safran.jpg';
     }
 
     public function getBaseForce(): int
@@ -45,7 +45,7 @@ final class NononoCat extends CharacterDefinition
 
     public function getPowerName(): string
     {
-        return 'Miaulement obstiné';
+        return 'Rugissement têtu';
     }
 
     public function getPowerDescription(): string
@@ -93,4 +93,3 @@ final class NononoCat extends CharacterDefinition
         );
     }
 }
-
