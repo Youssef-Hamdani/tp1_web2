@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Doge</title>
+  <desc id="desc">Portrait stylisé d'un chien majestueux.</desc>
+  <rect width="240" height="240" rx="120" fill="#20150e"/>
+  <circle cx="120" cy="124" r="78" fill="#e2b57c"/>
+  <path d="M82 84l-24-28 12 52M158 84l24-28-12 52" fill="#9f6a3d"/>
+  <circle cx="98" cy="122" r="10" fill="#111827"/>
+  <circle cx="144" cy="122" r="10" fill="#111827"/>
+  <ellipse cx="121" cy="144" rx="14" ry="10" fill="#111827"/>
+  <path d="M94 162c16 14 36 14 52 0" fill="none" stroke="#fff7ed" stroke-linecap="round" stroke-width="8"/>
+</svg>
+

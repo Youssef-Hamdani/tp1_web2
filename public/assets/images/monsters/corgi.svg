@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Corgi</title>
+  <desc id="desc">Portrait stylisé d'un corgi résistant.</desc>
+  <rect width="240" height="240" rx="120" fill="#14213d"/>
+  <circle cx="120" cy="124" r="78" fill="#f59e0b"/>
+  <path d="M70 84l18-26 18 40M170 84l-18-26-18 40" fill="#fff7ed"/>
+  <circle cx="98" cy="124" r="10" fill="#111827"/>
+  <circle cx="142" cy="124" r="10" fill="#111827"/>
+  <ellipse cx="120" cy="146" rx="14" ry="10" fill="#111827"/>
+  <path d="M92 164c18-6 38-6 56 0" fill="none" stroke="#111827" stroke-linecap="round" stroke-width="8"/>
+</svg>
+

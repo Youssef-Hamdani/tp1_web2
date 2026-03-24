@@ -1,0 +1,462 @@
+:root {
+    --bg: #050816;
+    --panel: rgba(21, 31, 56, 0.88);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --text: #f8fafc;
+    --muted: #b5c1d7;
+    --primary: #f8fafc;
+    --primary-text: #0f172a;
+    --danger: #991b1b;
+    --success: #166534;
+    --field: #111b31;
+    --field-border: rgba(255, 255, 255, 0.12);
+    --shadow: 0 28px 60px rgba(2, 6, 23, 0.4);
+    --radius: 22px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Outfit", sans-serif;
+    background: radial-gradient(circle at top, rgba(46, 72, 126, 0.28), transparent 36%), var(--bg);
+    color: var(--text);
+}
+
+.page-backdrop {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(95, 124, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.06), transparent 16%),
+        radial-gradient(circle at 50% 120%, rgba(255, 210, 110, 0.12), transparent 24%);
+    pointer-events: none;
+}
+
+.page-shell {
+    position: relative;
+    z-index: 1;
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 64px;
+}
+
+.stack {
+    display: grid;
+    gap: 18px;
+}
+
+.stack-sm {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.hero,
+.brand-line,
+.combat-grid,
+.combat-actions,
+.summary-grid {
+    display: flex;
+    gap: 18px;
+}
+
+.hero {
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.hero h1,
+.hero h2,
+.hero p {
+    margin: 0;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+}
+
+.hero-center {
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.auth-shell {
+    width: min(520px, 100%);
+    margin: 48px auto 0;
+}
+
+.brand-line {
+    align-items: center;
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    background: linear-gradient(160deg, #ffd56b, #f59e0b);
+    color: #241500;
+    font-size: 1.65rem;
+    font-weight: 800;
+    box-shadow: var(--shadow);
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+}
+
+.auth-panel,
+.game-panel,
+.end-panel,
+.combat-card {
+    padding: 28px;
+}
+
+.game-panel,
+.end-panel {
+    width: min(860px, 100%);
+    margin: 0 auto;
+}
+
+.panel-heading {
+    margin-bottom: 20px;
+}
+
+.panel-heading h2 {
+    margin: 0 0 8px;
+    font-size: 1.25rem;
+}
+
+.panel-heading p,
+.switch-link,
+.choice-card small,
+.summary-card span,
+.combat-card-head p {
+    color: var(--muted);
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+.field span {
+    font-weight: 600;
+}
+
+.field input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--field-border);
+    background: var(--field);
+    color: var(--text);
+    font: inherit;
+}
+
+.field input:focus,
+.choice-card input:focus + .choice-card-body {
+    outline: 3px solid rgba(255, 255, 255, 0.24);
+    outline-offset: 2px;
+}
+
+.button {
+    border: 0;
+    border-radius: 16px;
+    padding: 14px 22px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.16s ease, opacity 0.16s ease, background-color 0.16s ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+}
+
+.button-primary {
+    background: var(--primary);
+    color: var(--primary-text);
+}
+
+.button-outline,
+.button-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.button-block {
+    width: 100%;
+}
+
+.notice {
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-weight: 600;
+}
+
+.notice-success,
+.notice-success .end-copy {
+    background: rgba(22, 101, 52, 0.92);
+}
+
+.notice-danger {
+    background: rgba(153, 27, 27, 0.92);
+}
+
+.notice-error {
+    background: rgba(153, 27, 27, 0.92);
+}
+
+.choice-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.choice-grid-characters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.choice-grid-doors {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.choice-card {
+    display: block;
+}
+
+.choice-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.choice-card-body {
+    height: 100%;
+    display: grid;
+    gap: 10px;
+    padding: 18px;
+    background: rgba(16, 24, 44, 0.86);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    min-height: 250px;
+    cursor: pointer;
+    transition: border-color 0.16s ease, transform 0.16s ease, background-color 0.16s ease;
+}
+
+.choice-card-body:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.choice-card input:checked + .choice-card-body {
+    border-color: rgba(255, 255, 255, 0.94);
+    background: rgba(31, 45, 74, 0.96);
+}
+
+.choice-card-door .choice-card-body {
+    min-height: 160px;
+    place-items: center;
+    text-align: center;
+}
+
+.choice-card-opened .choice-card-body {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.door-icon {
+    font-size: 2.4rem;
+}
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.avatar-large {
+    width: 104px;
+    height: 104px;
+}
+
+.message-stack {
+    display: grid;
+    gap: 12px;
+}
+
+.combat-grid,
+.summary-grid {
+    align-items: stretch;
+}
+
+.combat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.combat-card-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.combat-card-head h2 {
+    margin: 0 0 6px;
+    font-size: 2rem;
+}
+
+.stats-list {
+    display: grid;
+    gap: 14px;
+    margin: 0 0 20px;
+}
+
+.stats-list div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.stats-list dt,
+.stats-list dd {
+    margin: 0;
+    font-size: 1.12rem;
+}
+
+.health-bar {
+    width: 100%;
+    height: 24px;
+    background: rgba(5, 8, 22, 0.78);
+    border-radius: 999px;
+    padding: 4px;
+}
+
+.health-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ff2d55, #ff4545);
+    transition: width 0.2s ease;
+}
+
+.combat-actions {
+    justify-content: center;
+    gap: 16px;
+}
+
+.result-badge {
+    display: inline-flex;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.result-badge-victory {
+    background: rgba(22, 101, 52, 0.24);
+    color: #c7f9d2;
+}
+
+.result-badge-defeat {
+    background: rgba(153, 27, 27, 0.22);
+    color: #fecaca;
+}
+
+.end-panel h2,
+.end-copy {
+    margin-top: 0;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin: 26px 0;
+}
+
+.summary-card {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 22px;
+    border-radius: 18px;
+    background: rgba(16, 24, 44, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+a {
+    color: #fbd86d;
+}
+
+@media (max-width: 880px) {
+    .choice-grid-characters,
+    .combat-grid,
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .choice-grid-doors {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .page-shell {
+        width: min(100% - 20px, 100%);
+        padding-top: 20px;
+    }
+
+    .hero,
+    .combat-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .button,
+    .button-block {
+        width: 100%;
+    }
+
+    .choice-grid-doors {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .auth-panel,
+    .game-panel,
+    .end-panel,
+    .combat-card {
+        padding: 20px;
+    }
+}
