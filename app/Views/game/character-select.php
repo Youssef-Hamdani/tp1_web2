@@ -3,7 +3,7 @@
         <div class="brand-line">
             <div class="brand-mark">F</div>
             <div>
-                <h1>Fruits en Furie</h1>
+                <h1>fruityloops</h1>
                 <p>Choisissez votre fruit de combat</p>
             </div>
         </div>

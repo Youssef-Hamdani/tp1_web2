@@ -3,7 +3,7 @@
         <div class="brand-line">
             <div class="brand-mark">F</div>
             <div>
-                <h1>Fruits en Furie</h1>
+                <h1>fruityloops</h1>
                 <p>Une porte cache un legume ennemi, les autres modifient vos stats.</p>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <section class="auth-shell">
     <header class="hero hero-center">
         <div class="brand-mark">F</div>
-        <h1>Fruits en Furie</h1>
+        <h1>fruityloops</h1>
         <p>Creez votre compte avant d'entrer dans le couloir des ingredients hostiles.</p>
     </header>
 

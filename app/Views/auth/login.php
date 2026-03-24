@@ -1,7 +1,7 @@
 <section class="auth-shell">
     <header class="hero hero-center">
         <div class="brand-mark">F</div>
-        <h1>Fruits en Furie</h1>
+        <h1>fruityloops</h1>
         <p>Entrez dans l'arene du marche et menez votre fruit jusqu'au duel final.</p>
     </header>
 

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/app/bootstrap.php';
 
-$config = require __DIR__ . '/config/app.php';
-$application = new App\Core\Application($config);
+$application = App\Core\Application::depuisEnvironnement();
 
 if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'POST') {
     $application->auth()->traiterInscription();
