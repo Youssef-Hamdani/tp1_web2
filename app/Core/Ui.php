@@ -6,19 +6,18 @@ namespace App\Core;
 
 final class Ui
 {
-    public function e(mixed $value): string
+    public function echapper(mixed $value): string
     {
         return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
     }
 
-    public function asset(string $path): string
+    public function ressource(string $path): string
     {
         return '/public/assets/' . ltrim($path, '/');
     }
 
-    public function url(string $page = '', array $params = array()): string
+    public function lien(string $route = 'accueil', array $params = array()): string
     {
-        return Url::page($page, $params);
+        return Url::vers($route, $params);
     }
 }
-

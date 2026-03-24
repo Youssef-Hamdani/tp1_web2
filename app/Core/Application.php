@@ -31,7 +31,7 @@ final class Application
         $userRepository = new UserRepository($pdo);
         $monsterRepository = new MonsterRepository($pdo);
         $databaseInitializer = new DatabaseInitializer($pdo, $monsterRepository);
-        $databaseInitializer->initialize();
+        $databaseInitializer->initialiser();
         $combatService = new CombatService();
 
         $this->authController = new AuthController($view, $flash, $this->gameSession, $userRepository);
@@ -39,101 +39,23 @@ final class Application
         $this->combatApiController = new CombatApiController($view, $flash, $this->gameSession, $combatService, $characterCatalog);
     }
 
-    public function handle(): void
+    public function auth(): AuthController
     {
-        $page = (string) ($_GET['page'] ?? '');
-        $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+        return $this->authController;
+    }
 
-        if ($page === '') {
-            if (! $this->gameSession->isAuthenticated()) {
-                $this->authController->showLogin();
+    public function jeu(): GameController
+    {
+        return $this->gameController;
+    }
 
-                return;
-            }
+    public function apiCombat(): CombatApiController
+    {
+        return $this->combatApiController;
+    }
 
-            header('Location: ' . Url::page($this->gameSession->currentGamePage()));
-            exit;
-        }
-
-        if ($page === 'login' && $method === 'GET') {
-            $this->authController->showLogin();
-
-            return;
-        }
-
-        if ($page === 'login' && $method === 'POST') {
-            $this->authController->login();
-
-            return;
-        }
-
-        if ($page === 'register' && $method === 'GET') {
-            $this->authController->showRegister();
-
-            return;
-        }
-
-        if ($page === 'register' && $method === 'POST') {
-            $this->authController->register();
-
-            return;
-        }
-
-        if ($page === 'logout' && $method === 'POST') {
-            $this->authController->logout();
-
-            return;
-        }
-
-        if ($page === 'character' && $method === 'GET') {
-            $this->gameController->showCharacterSelection();
-
-            return;
-        }
-
-        if ($page === 'character' && $method === 'POST') {
-            $this->gameController->chooseCharacter();
-
-            return;
-        }
-
-        if ($page === 'doors' && $method === 'GET') {
-            $this->gameController->showDoors();
-
-            return;
-        }
-
-        if ($page === 'open-door' && $method === 'POST') {
-            $this->gameController->openDoor();
-
-            return;
-        }
-
-        if ($page === 'combat' && $method === 'GET') {
-            $this->gameController->showCombat();
-
-            return;
-        }
-
-        if ($page === 'api-combat' && $method === 'POST') {
-            $this->combatApiController->turn();
-
-            return;
-        }
-
-        if ($page === 'end' && $method === 'GET') {
-            $this->gameController->showEnd();
-
-            return;
-        }
-
-        if ($page === 'replay' && $method === 'POST') {
-            $this->gameController->replay();
-
-            return;
-        }
-
-        http_response_code(404);
-        echo 'Page introuvable.';
+    public function sessionJeu(): GameSessionService
+    {
+        return $this->gameSession;
     }
 }

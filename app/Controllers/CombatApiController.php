@@ -29,18 +29,18 @@ final class CombatApiController extends Controller
         $this->characterCatalog = $characterCatalog;
     }
 
-    public function turn(): void
+    public function jouerTour(): void
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        if (! $this->gameSession->isAuthenticated()) {
+        if (! $this->gameSession->estAuthentifie()) {
             http_response_code(401);
             echo json_encode(array('ok' => false, 'message' => 'Authentification requise.'));
 
             return;
         }
 
-        $game = $this->gameSession->getGame();
+        $game = $this->gameSession->obtenirPartie();
 
         if ($game === null || ($game['status'] ?? '') !== 'in_combat') {
             http_response_code(403);
@@ -49,7 +49,7 @@ final class CombatApiController extends Controller
             return;
         }
 
-        $character = $this->characterCatalog->find($game['player']['character_id']);
+        $character = $this->characterCatalog->trouver($game['player']['character_id']);
 
         if ($character === null) {
             http_response_code(500);
@@ -59,18 +59,18 @@ final class CombatApiController extends Controller
         }
 
         $action = (string) ($_POST['action'] ?? 'attack');
-        $updatedGame = $this->combatService->processTurn($game, $character, $action === 'power' ? 'power' : 'attack');
-        $this->gameSession->saveGame($updatedGame);
+        $updatedGame = $this->combatService->traiterTour($game, $character, $action === 'power' ? 'power' : 'attack');
+        $this->gameSession->sauvegarderPartie($updatedGame);
 
         echo json_encode(
             array(
                 'ok' => true,
                 'finished' => ($updatedGame['status'] ?? '') === 'finished',
-                'redirectUrl' => ($updatedGame['status'] ?? '') === 'finished' ? Url::page('end') : null,
+                'redirectUrl' => ($updatedGame['status'] ?? '') === 'finished' ? Url::vers('fin') : null,
                 'player' => $updatedGame['player'],
                 'monster' => $updatedGame['combat']['monster'],
                 'logs' => $updatedGame['combat']['logs'],
-                'powerAvailable' => $character->canUsePower($updatedGame['player']),
+                'powerAvailable' => $character->peutUtiliserPouvoir($updatedGame['player']),
             )
         );
     }

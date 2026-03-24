@@ -17,19 +17,18 @@ final class User
         $this->passwordHash = $passwordHash;
     }
 
-    public function getId(): int
+    public function obtenirId(): int
     {
         return $this->id;
     }
 
-    public function getUsername(): string
+    public function obtenirNomUtilisateur(): string
     {
         return $this->username;
     }
 
-    public function getPasswordHash(): string
+    public function obtenirMotDePasseHache(): string
     {
         return $this->passwordHash;
     }
 }
-

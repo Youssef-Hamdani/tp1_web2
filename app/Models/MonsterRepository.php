@@ -16,14 +16,14 @@ final class MonsterRepository
         $this->pdo = $pdo;
     }
 
-    public function count(): int
+    public function compter(): int
     {
         $result = $this->pdo->query('SELECT COUNT(*) AS count FROM monsters')->fetch();
 
         return (int) $result['count'];
     }
 
-    public function seed(array $monsters): void
+    public function ensemencer(array $monsters): void
     {
         $statement = $this->pdo->prepare(
             'INSERT INTO monsters (name, description, image_path, attack_power, armor, hp)
@@ -35,7 +35,7 @@ final class MonsterRepository
         }
     }
 
-    public function findRandom(): Monster
+    public function trouverAuHasard(): Monster
     {
         $row = $this->pdo->query(
             'SELECT id, name, description, image_path, attack_power, armor, hp

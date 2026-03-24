@@ -19,33 +19,33 @@ abstract class Controller
         $this->gameSession = $gameSession;
     }
 
-    protected function render(string $template, array $data = array()): void
+    protected function afficherVue(string $template, array $data = array()): void
     {
-        $data['flashMessages'] = $this->flash->pull();
-        $data['isAuthenticated'] = $this->gameSession->isAuthenticated();
-        $data['currentUser'] = $this->gameSession->getCurrentUser();
+        $data['flashMessages'] = $this->flash->retirer();
+        $data['isAuthenticated'] = $this->gameSession->estAuthentifie();
+        $data['currentUser'] = $this->gameSession->obtenirUtilisateurCourant();
 
-        $this->view->render($template, $data);
+        $this->view->afficher($template, $data);
     }
 
-    protected function redirect(string $page = '', array $params = array()): void
+    protected function rediriger(string $route = 'accueil', array $params = array()): void
     {
-        header('Location: ' . Url::page($page, $params));
+        header('Location: ' . Url::vers($route, $params));
         exit;
     }
 
-    protected function requireAuthentication(): void
+    protected function exigerAuthentification(): void
     {
-        if (! $this->gameSession->isAuthenticated()) {
-            $this->flash->add('error', 'Veuillez vous connecter pour continuer.');
-            $this->redirect('login');
+        if (! $this->gameSession->estAuthentifie()) {
+            $this->flash->ajouter('error', 'Veuillez vous connecter pour continuer.');
+            $this->rediriger('connexion');
         }
     }
 
-    protected function requireGuest(): void
+    protected function exigerInvite(): void
     {
-        if ($this->gameSession->isAuthenticated()) {
-            $this->redirect($this->gameSession->currentGamePage());
+        if ($this->gameSession->estAuthentifie()) {
+            $this->rediriger($this->gameSession->obtenirPageCouranteJeu());
         }
     }
 }

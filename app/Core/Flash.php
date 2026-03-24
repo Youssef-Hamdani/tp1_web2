@@ -8,7 +8,7 @@ final class Flash
 {
     private const SESSION_KEY = '_flash_messages';
 
-    public function add(string $type, string $message): void
+    public function ajouter(string $type, string $message): void
     {
         if (! isset($_SESSION[self::SESSION_KEY])) {
             $_SESSION[self::SESSION_KEY] = array();
@@ -20,7 +20,7 @@ final class Flash
         );
     }
 
-    public function pull(): array
+    public function retirer(): array
     {
         $messages = $_SESSION[self::SESSION_KEY] ?? array();
         unset($_SESSION[self::SESSION_KEY]);
@@ -28,4 +28,3 @@ final class Flash
         return $messages;
     }
 }
-

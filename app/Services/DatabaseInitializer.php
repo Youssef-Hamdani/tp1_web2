@@ -18,7 +18,7 @@ final class DatabaseInitializer
         $this->monsterRepository = $monsterRepository;
     }
 
-    public function initialize(): void
+    public function initialiser(): void
     {
         $this->pdo->exec(
             'CREATE TABLE IF NOT EXISTS users (
@@ -41,54 +41,53 @@ final class DatabaseInitializer
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
 
-        if ($this->shouldRefreshMonsters()) {
+        if ($this->doitActualiserMonstres()) {
             $this->pdo->exec('TRUNCATE TABLE monsters');
+            $this->monsterRepository->ensemencer(
+                array(
+                    array(
+                        'name' => 'Brocoli Brutal',
+                        'description' => 'Toujours pret a encaisser et a repousser les charges.',
+                        'image_path' => 'images/monsters/brocoli.jpg',
+                        'attack_power' => 17,
+                        'armor' => 15,
+                        'hp' => 30,
+                    ),
+                    array(
+                        'name' => 'Citrouille Colossale',
+                        'description' => 'Massive, lente et tres difficile a fissurer.',
+                        'image_path' => 'images/monsters/citrouille.jpg',
+                        'attack_power' => 19,
+                        'armor' => 14,
+                        'hp' => 32,
+                    ),
+                    array(
+                        'name' => 'Piment Feroce',
+                        'description' => 'Petit, vif et capable de piquer tres fort.',
+                        'image_path' => 'images/monsters/piment.jpg',
+                        'attack_power' => 24,
+                        'armor' => 10,
+                        'hp' => 25,
+                    ),
+                    array(
+                        'name' => 'Aubergine Nocturne',
+                        'description' => 'Elegante, sombre et pleine de surprises.',
+                        'image_path' => 'images/monsters/aubergine.jpg',
+                        'attack_power' => 21,
+                        'armor' => 12,
+                        'hp' => 28,
+                    ),
+                )
+            );
         }
-
-        $this->monsterRepository->seed(
-            array(
-                array(
-                    'name' => 'Chihuahua',
-                    'description' => 'Petit, nerveux et imprévisible.',
-                    'image_path' => 'images/monsters/chihuahua.jpg',
-                    'attack_power' => 22,
-                    'armor' => 9,
-                    'hp' => 24,
-                ),
-                array(
-                    'name' => 'Shiba Inu',
-                    'description' => 'Un rival majestueux à la mâchoire solide.',
-                    'image_path' => 'images/monsters/shiba.jpg',
-                    'attack_power' => 20,
-                    'armor' => 12,
-                    'hp' => 28,
-                ),
-                array(
-                    'name' => 'Corgi',
-                    'description' => 'Bas sur pattes, mais très résistant.',
-                    'image_path' => 'images/monsters/corgi.jpg',
-                    'attack_power' => 17,
-                    'armor' => 15,
-                    'hp' => 30,
-                ),
-                array(
-                    'name' => 'Husky',
-                    'description' => 'Rapide, bruyant et capable de gros dégâts.',
-                    'image_path' => 'images/monsters/husky.jpg',
-                    'attack_power' => 24,
-                    'armor' => 10,
-                    'hp' => 26,
-                ),
-            )
-        );
     }
 
-    private function shouldRefreshMonsters(): bool
+    private function doitActualiserMonstres(): bool
     {
         $row = $this->pdo->query(
             "SELECT
                 COUNT(*) AS total,
-                SUM(CASE WHEN image_path LIKE '%.svg' THEN 1 ELSE 0 END) AS svg_count
+                SUM(CASE WHEN name IN ('Chihuahua', 'Shiba Inu', 'Corgi', 'Husky') THEN 1 ELSE 0 END) AS old_count
              FROM monsters"
         )->fetch();
 
@@ -96,6 +95,6 @@ final class DatabaseInitializer
             return true;
         }
 
-        return (int) $row['total'] !== 4 || (int) $row['svg_count'] > 0;
+        return (int) $row['total'] !== 4 || (int) $row['old_count'] > 0;
     }
 }

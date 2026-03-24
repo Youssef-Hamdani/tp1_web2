@@ -29,47 +29,47 @@ final class GameController extends Controller
         $this->monsterRepository = $monsterRepository;
     }
 
-    public function showCharacterSelection(): void
+    public function afficherSelectionPersonnage(): void
     {
-        $this->requireAuthentication();
+        $this->exigerAuthentification();
 
-        if ($this->gameSession->hasGame()) {
-            $this->redirect($this->gameSession->currentGamePage());
+        if ($this->gameSession->aUnePartie()) {
+            $this->rediriger($this->gameSession->obtenirPageCouranteJeu());
         }
 
-        $this->render(
+        $this->afficherVue(
             'game.character-select',
             array(
-                'title' => 'Choisir un personnage',
-                'characters' => $this->characterCatalog->all(),
+                'title' => 'Choisir un fruit',
+                'characters' => $this->characterCatalog->tous(),
             )
         );
     }
 
-    public function chooseCharacter(): void
+    public function choisirPersonnage(): void
     {
-        $this->requireAuthentication();
+        $this->exigerAuthentification();
 
         $characterId = (string) ($_POST['character_id'] ?? '');
-        $character = $this->characterCatalog->find($characterId);
+        $character = $this->characterCatalog->trouver($characterId);
 
         if (! $character instanceof CharacterDefinition) {
-            $this->flash->add('error', 'Veuillez choisir un personnage valide.');
-            $this->redirect('character');
+            $this->flash->ajouter('error', 'Veuillez choisir un fruit valide.');
+            $this->rediriger('personnages');
         }
 
-        $this->gameSession->startNewGame($character);
-        $this->redirect('doors');
+        $this->gameSession->demarrerNouvellePartie($character);
+        $this->rediriger('portes');
     }
 
-    public function showDoors(): void
+    public function afficherPortes(): void
     {
-        $this->requireAuthentication();
-        $game = $this->requireGame('doors');
-        $feedback = $this->gameSession->consumeFeedback($game);
-        $this->gameSession->saveGame($game);
+        $this->exigerAuthentification();
+        $game = $this->exigerPartie('doors');
+        $feedback = $this->gameSession->consommerRetour($game);
+        $this->gameSession->sauvegarderPartie($game);
 
-        $this->render(
+        $this->afficherVue(
             'game.doors',
             array(
                 'title' => 'Choisir une porte',
@@ -79,55 +79,55 @@ final class GameController extends Controller
         );
     }
 
-    public function openDoor(): void
+    public function ouvrirPorte(): void
     {
-        $this->requireAuthentication();
-        $game = $this->requireGame('doors');
+        $this->exigerAuthentification();
+        $game = $this->exigerPartie('doors');
         $doorNumber = (int) ($_POST['door_number'] ?? 0);
-        $doorIndex = $this->findDoorIndex($game['doors'], $doorNumber);
+        $doorIndex = $this->trouverIndexPorte($game['doors'], $doorNumber);
 
         if ($doorIndex === -1) {
-            $this->flash->add('error', 'Cette porte n\'existe pas.');
-            $this->redirect('doors');
+            $this->flash->ajouter('error', 'Cette porte n\'existe pas.');
+            $this->rediriger('portes');
         }
 
         if ($game['doors'][$doorIndex]['opened']) {
-            $this->flash->add('error', 'Cette porte a déjà été ouverte.');
-            $this->redirect('doors');
+            $this->flash->ajouter('error', 'Cette porte a deja ete ouverte.');
+            $this->rediriger('portes');
         }
 
         $game['doors'][$doorIndex]['opened'] = true;
 
         if ($game['doors'][$doorIndex]['type'] === 'combat') {
-            $monster = $this->monsterRepository->findRandom();
-            $monsterData = $monster->toArray();
+            $monster = $this->monsterRepository->trouverAuHasard();
+            $monsterData = $monster->versTableau();
             $game['status'] = 'in_combat';
             $game['combat'] = array(
                 'monster' => $monsterData,
                 'logs' => array(
                     array(
                         'tone' => 'danger',
-                        'text' => sprintf('La porte s\'ouvre: %s surgit et réclame un duel.', $monsterData['name']),
+                        'text' => sprintf('La porte s\'ouvre: %s surgit et reclame un duel.', $monsterData['name']),
                     ),
                 ),
             );
             $game['feedback'] = null;
-            $this->gameSession->saveGame($game);
-            $this->redirect('combat');
+            $this->gameSession->sauvegarderPartie($game);
+            $this->rediriger('combat');
         }
 
-        $game['feedback'] = $this->applyDoorEffect($game, $game['doors'][$doorIndex]['effect']);
-        $this->gameSession->saveGame($game);
-        $this->redirect('doors');
+        $game['feedback'] = $this->appliquerEffetPorte($game, $game['doors'][$doorIndex]['effect']);
+        $this->gameSession->sauvegarderPartie($game);
+        $this->rediriger('portes');
     }
 
-    public function showCombat(): void
+    public function afficherCombat(): void
     {
-        $this->requireAuthentication();
-        $game = $this->requireGame('in_combat');
-        $character = $this->characterCatalog->find($game['player']['character_id']);
+        $this->exigerAuthentification();
+        $game = $this->exigerPartie('in_combat');
+        $character = $this->characterCatalog->trouver($game['player']['character_id']);
 
-        $this->render(
+        $this->afficherVue(
             'game.combat',
             array(
                 'title' => 'Combat',
@@ -137,12 +137,12 @@ final class GameController extends Controller
         );
     }
 
-    public function showEnd(): void
+    public function afficherFin(): void
     {
-        $this->requireAuthentication();
-        $game = $this->requireGame('finished');
+        $this->exigerAuthentification();
+        $game = $this->exigerPartie('finished');
 
-        $this->render(
+        $this->afficherVue(
             'game.end',
             array(
                 'title' => 'Fin de partie',
@@ -151,32 +151,32 @@ final class GameController extends Controller
         );
     }
 
-    public function replay(): void
+    public function recommencer(): void
     {
-        $this->requireAuthentication();
-        $this->gameSession->clearGame();
-        $this->redirect('character');
+        $this->exigerAuthentification();
+        $this->gameSession->effacerPartie();
+        $this->rediriger('personnages');
     }
 
-    private function requireGame(string $expectedStatus): array
+    private function exigerPartie(string $expectedStatus): array
     {
-        $game = $this->gameSession->getGame();
+        $game = $this->gameSession->obtenirPartie();
 
         if ($game === null) {
-            $this->flash->add('error', 'Commencez une nouvelle partie.');
-            $this->redirect('character');
+            $this->flash->ajouter('error', 'Commencez une nouvelle partie.');
+            $this->rediriger('personnages');
         }
 
         $status = $game['status'] ?? 'doors';
 
         if ($status !== $expectedStatus) {
-            $this->redirect($this->gameSession->currentGamePage());
+            $this->rediriger($this->gameSession->obtenirPageCouranteJeu());
         }
 
         return $game;
     }
 
-    private function findDoorIndex(array $doors, int $doorNumber): int
+    private function trouverIndexPorte(array $doors, int $doorNumber): int
     {
         foreach ($doors as $index => $door) {
             if ((int) $door['number'] === $doorNumber) {
@@ -187,7 +187,7 @@ final class GameController extends Controller
         return -1;
     }
 
-    private function applyDoorEffect(array &$game, array $effect): array
+    private function appliquerEffetPorte(array &$game, array $effect): array
     {
         $player = &$game['player'];
         $mode = $effect['mode'];
@@ -237,7 +237,7 @@ final class GameController extends Controller
 
         return array(
             'tone' => $amount > 0 ? 'success' : 'danger',
-            'text' => sprintf('%s: %s%d défense (Défense: %d).', $headline, $amount > 0 ? '+' : '', $amount, $player['defense']),
+            'text' => sprintf('%s: %s%d defense (Defense: %d).', $headline, $amount > 0 ? '+' : '', $amount, $player['defense']),
         );
     }
 }

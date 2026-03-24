@@ -14,20 +14,19 @@ final class CharacterCatalog
     public function __construct()
     {
         $this->characters = array(
-            'simon' => new SimonCat(),
-            'nyan' => new NyanCat(),
-            'nonono' => new NononoCat(),
+            'fraise' => new FraiseFurie(),
+            'banane' => new BananeTurbo(),
+            'ananas' => new AnanasRoyal(),
         );
     }
 
-    public function all(): array
+    public function tous(): array
     {
         return $this->characters;
     }
 
-    public function find(string $id): ?CharacterDefinition
+    public function trouver(string $id): ?CharacterDefinition
     {
         return $this->characters[$id] ?? null;
     }
 }
-

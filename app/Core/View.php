@@ -19,9 +19,9 @@ final class View
         $this->imageCredits = $imageCredits;
     }
 
-    public function render(string $template, array $data = array()): void
+    public function afficher(string $template, array $data = array()): void
     {
-        $contentTemplate = $this->resolvePath($template);
+        $contentTemplate = $this->resoudreChemin($template);
         $title = $data['title'] ?? $this->appName;
         $appName = $this->appName;
         $imageCredits = $this->imageCredits;
@@ -32,7 +32,7 @@ final class View
         require $this->viewsPath . DIRECTORY_SEPARATOR . 'layout.php';
     }
 
-    private function resolvePath(string $template): string
+    private function resoudreChemin(string $template): string
     {
         $path = $this->viewsPath . DIRECTORY_SEPARATOR . str_replace('.', DIRECTORY_SEPARATOR, $template) . '.php';
 

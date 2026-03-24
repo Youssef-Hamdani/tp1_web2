@@ -32,7 +32,7 @@ final class Monster
         $this->hp = $hp;
     }
 
-    public function toArray(): array
+    public function versTableau(): array
     {
         return array(
             'id' => $this->id,
@@ -46,4 +46,3 @@ final class Monster
         );
     }
 }
-

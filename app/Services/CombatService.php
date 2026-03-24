@@ -8,15 +8,15 @@ use App\Domain\Characters\CharacterDefinition;
 
 final class CombatService
 {
-    public function processTurn(array $game, CharacterDefinition $character, string $action): array
+    public function traiterTour(array $game, CharacterDefinition $character, string $action): array
     {
         $player = &$game['player'];
         $monster = &$game['combat']['monster'];
         $logs = array();
 
         if ($action === 'power') {
-            if ($character->canUsePower($player)) {
-                $logs = array_merge($logs, $character->usePower($player, $monster, $this));
+            if ($character->peutUtiliserPouvoir($player)) {
+                $logs = array_merge($logs, $character->utiliserPouvoir($player, $monster, $this));
             } else {
                 $logs[] = array(
                     'tone' => 'danger',
@@ -24,7 +24,7 @@ final class CombatService
                 );
             }
         } else {
-            $details = $this->resolveAttack($player, $monster, $character->getAttackBonus($player), 0);
+            $details = $this->resoudreAttaque($player, $monster, $character->obtenirBonusAttaque($player), 0);
             $logs[] = array(
                 'tone' => 'success',
                 'text' => sprintf(
@@ -33,13 +33,13 @@ final class CombatService
                     $details['attack'],
                     $monster['name'],
                     $details['guard'],
-                    $this->formatDamage($details['damage'])
+                    $this->formaterDegats($details['damage'])
                 ),
             );
         }
 
         if ($monster['hp'] > 0) {
-            $monsterDetails = $this->resolveAttack($monster, $player, 0, $character->getDefenseBonus($player));
+            $monsterDetails = $this->resoudreAttaque($monster, $player, 0, $character->obtenirBonusDefense($player));
             $logs[] = array(
                 'tone' => 'danger',
                 'text' => sprintf(
@@ -48,34 +48,34 @@ final class CombatService
                     $monsterDetails['attack'],
                     $player['name'],
                     $monsterDetails['guard'],
-                    $this->formatDamage($monsterDetails['damage'])
+                    $this->formaterDegats($monsterDetails['damage'])
                 ),
             );
         }
 
-        $character->afterRound($player);
+        $character->apresTour($player);
         $game['combat']['logs'] = array_slice(array_merge($logs, $game['combat']['logs']), 0, 4);
 
         if ($monster['hp'] <= 0) {
             $game['status'] = 'finished';
             $game['result'] = array(
                 'outcome' => 'victory',
-                'title' => 'Victoire féline',
-                'message' => sprintf('%s a vaincu %s et règne désormais sur le couloir.', $player['name'], $monster['name']),
+                'title' => 'Victoire juteuse',
+                'message' => sprintf('%s a ecrase %s et prend le controle du marche.', $player['name'], $monster['name']),
             );
         } elseif ($player['hp'] <= 0) {
             $game['status'] = 'finished';
             $game['result'] = array(
                 'outcome' => 'defeat',
-                'title' => 'Défaite',
-                'message' => sprintf('%s a été renversé par %s.', $player['name'], $monster['name']),
+                'title' => 'Defaite',
+                'message' => sprintf('%s a ete renverse par %s.', $player['name'], $monster['name']),
             );
         }
 
         return $game;
     }
 
-    public function resolveAttack(array $attacker, array &$defender, int $attackBonus, int $guardBonus): array
+    public function resoudreAttaque(array $attacker, array &$defender, int $attackBonus, int $guardBonus): array
     {
         $attack = $attacker['force'] + $attackBonus + random_int(1, 12);
         $guard = $defender['defense'] + $guardBonus + random_int(1, 12);
@@ -90,12 +90,12 @@ final class CombatService
         );
     }
 
-    public function formatDamage(int $damage): string
+    public function formaterDegats(int $damage): string
     {
         if ($damage <= 0) {
-            return 'aucun dégât';
+            return 'aucun degat';
         }
 
-        return sprintf('%d dégâts', $damage);
+        return sprintf('%d degats', $damage);
     }
 }

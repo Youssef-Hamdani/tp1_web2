@@ -1,16 +1,16 @@
 :root {
-    --bg: #050816;
-    --panel: rgba(21, 31, 56, 0.88);
-    --panel-border: rgba(255, 255, 255, 0.08);
-    --text: #f8fafc;
-    --muted: #b5c1d7;
-    --primary: #f8fafc;
-    --primary-text: #0f172a;
-    --danger: #991b1b;
-    --success: #166534;
-    --field: #111b31;
-    --field-border: rgba(255, 255, 255, 0.12);
-    --shadow: 0 28px 60px rgba(2, 6, 23, 0.4);
+    --bg: #130a07;
+    --panel: rgba(46, 22, 15, 0.86);
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --text: #fff7f0;
+    --muted: #f7d8c8;
+    --primary: #ffd166;
+    --primary-text: #371b0d;
+    --danger: #8f1d14;
+    --success: #2f7d32;
+    --field: #22100b;
+    --field-border: rgba(255, 255, 255, 0.14);
+    --shadow: 0 28px 60px rgba(18, 8, 5, 0.45);
     --radius: 22px;
 }
 
@@ -22,7 +22,9 @@ body {
     margin: 0;
     min-height: 100vh;
     font-family: "Outfit", sans-serif;
-    background: radial-gradient(circle at top, rgba(46, 72, 126, 0.28), transparent 36%), var(--bg);
+    background:
+        radial-gradient(circle at top, rgba(255, 214, 102, 0.18), transparent 34%),
+        linear-gradient(180deg, #190905 0%, #260e08 42%, #120704 100%);
     color: var(--text);
 }
 
@@ -36,9 +38,9 @@ body::after {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(circle at 20% 20%, rgba(95, 124, 255, 0.12), transparent 28%),
-        radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.06), transparent 16%),
-        radial-gradient(circle at 50% 120%, rgba(255, 210, 110, 0.12), transparent 24%);
+        radial-gradient(circle at 18% 14%, rgba(255, 92, 92, 0.16), transparent 20%),
+        radial-gradient(circle at 84% 12%, rgba(255, 209, 102, 0.15), transparent 16%),
+        radial-gradient(circle at 50% 115%, rgba(68, 183, 97, 0.16), transparent 24%);
     pointer-events: none;
 }
 
@@ -50,20 +52,22 @@ body::after {
     padding: 32px 0 64px;
 }
 
-.stack {
+.stack,
+.stack-sm {
     display: grid;
+}
+
+.stack {
     gap: 18px;
 }
 
 .stack-sm {
-    display: grid;
     gap: 12px;
     margin-bottom: 18px;
 }
 
 .hero,
 .brand-line,
-.combat-grid,
 .combat-actions,
 .summary-grid {
     display: flex;
@@ -100,7 +104,7 @@ body::after {
 }
 
 .auth-shell {
-    width: min(520px, 100%);
+    width: min(540px, 100%);
     margin: 48px auto 0;
 }
 
@@ -114,8 +118,8 @@ body::after {
     width: 58px;
     height: 58px;
     border-radius: 18px;
-    background: linear-gradient(160deg, #ffd56b, #f59e0b);
-    color: #241500;
+    background: linear-gradient(160deg, #ff7b54, #ffd166);
+    color: #2b1107;
     font-size: 1.65rem;
     font-weight: 800;
     box-shadow: var(--shadow);
@@ -138,7 +142,7 @@ body::after {
 
 .game-panel,
 .end-panel {
-    width: min(860px, 100%);
+    width: min(900px, 100%);
     margin: 0 auto;
 }
 
@@ -229,15 +233,12 @@ body::after {
 
 .notice-success,
 .notice-success .end-copy {
-    background: rgba(22, 101, 52, 0.92);
+    background: rgba(47, 125, 50, 0.92);
 }
 
-.notice-danger {
-    background: rgba(153, 27, 27, 0.92);
-}
-
+.notice-danger,
 .notice-error {
-    background: rgba(153, 27, 27, 0.92);
+    background: rgba(143, 29, 20, 0.92);
 }
 
 .choice-grid {
@@ -268,7 +269,7 @@ body::after {
     display: grid;
     gap: 10px;
     padding: 18px;
-    background: rgba(16, 24, 44, 0.86);
+    background: rgba(29, 13, 10, 0.82);
     border: 2px solid rgba(255, 255, 255, 0.06);
     border-radius: 20px;
     min-height: 250px;
@@ -282,8 +283,8 @@ body::after {
 }
 
 .choice-card input:checked + .choice-card-body {
-    border-color: rgba(255, 255, 255, 0.94);
-    background: rgba(31, 45, 74, 0.96);
+    border-color: rgba(255, 209, 102, 0.92);
+    background: rgba(55, 22, 13, 0.96);
 }
 
 .choice-card-door .choice-card-body {
@@ -298,7 +299,7 @@ body::after {
 }
 
 .door-icon {
-    font-size: 2.4rem;
+    font-size: 2rem;
 }
 
 .avatar {
@@ -310,8 +311,8 @@ body::after {
 }
 
 .avatar-large {
-    width: 104px;
-    height: 104px;
+    width: 116px;
+    height: 116px;
 }
 
 .message-stack {
@@ -321,13 +322,10 @@ body::after {
 
 .combat-grid,
 .summary-grid {
-    align-items: stretch;
-}
-
-.combat-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
+    align-items: stretch;
 }
 
 .combat-card-head {
@@ -363,7 +361,7 @@ body::after {
 .health-bar {
     width: 100%;
     height: 24px;
-    background: rgba(5, 8, 22, 0.78);
+    background: rgba(12, 5, 3, 0.78);
     border-radius: 999px;
     padding: 4px;
 }
@@ -372,7 +370,7 @@ body::after {
     display: block;
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #ff2d55, #ff4545);
+    background: linear-gradient(90deg, #ff5a5f, #ffd166);
     transition: width 0.2s ease;
 }
 
@@ -390,13 +388,13 @@ body::after {
 }
 
 .result-badge-victory {
-    background: rgba(22, 101, 52, 0.24);
-    color: #c7f9d2;
+    background: rgba(47, 125, 50, 0.24);
+    color: #dff7d5;
 }
 
 .result-badge-defeat {
-    background: rgba(153, 27, 27, 0.22);
-    color: #fecaca;
+    background: rgba(143, 29, 20, 0.22);
+    color: #ffd5cf;
 }
 
 .end-panel h2,
@@ -405,10 +403,8 @@ body::after {
 }
 
 .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
     margin: 26px 0;
+    gap: 18px;
 }
 
 .summary-card {
@@ -417,13 +413,13 @@ body::after {
     gap: 10px;
     padding: 22px;
     border-radius: 18px;
-    background: rgba(16, 24, 44, 0.82);
+    background: rgba(29, 13, 10, 0.82);
     border: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
 }
 
 a {
-    color: #fbd86d;
+    color: #ffd166;
 }
 
 .credits-bar {
@@ -438,7 +434,7 @@ a {
 }
 
 .credits-bar a {
-    color: #d5def0;
+    color: #fff0d1;
 }
 
 .credits-sep {
@@ -472,10 +468,6 @@ a {
     .button,
     .button-block {
         width: 100%;
-    }
-
-    .choice-grid-doors {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .auth-panel,

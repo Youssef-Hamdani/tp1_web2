@@ -11,45 +11,45 @@ final class GameSessionService
 {
     private const USER_KEY = 'auth_user';
     private const GAME_KEY = 'active_game';
-    private const GAME_VERSION = 2;
+    private const GAME_VERSION = 3;
 
-    public function isAuthenticated(): bool
+    public function estAuthentifie(): bool
     {
         return isset($_SESSION[self::USER_KEY]);
     }
 
-    public function login(User $user): void
+    public function ouvrirSessionUtilisateur(User $user): void
     {
         $_SESSION[self::USER_KEY] = array(
-            'id' => $user->getId(),
-            'username' => $user->getUsername(),
+            'id' => $user->obtenirId(),
+            'username' => $user->obtenirNomUtilisateur(),
         );
 
         session_regenerate_id(true);
     }
 
-    public function logout(): void
+    public function fermerSessionUtilisateur(): void
     {
         unset($_SESSION[self::USER_KEY], $_SESSION[self::GAME_KEY], $_SESSION['_flash_messages']);
         session_regenerate_id(true);
     }
 
-    public function getCurrentUser(): ?array
+    public function obtenirUtilisateurCourant(): ?array
     {
         return $_SESSION[self::USER_KEY] ?? null;
     }
 
-    public function hasGame(): bool
+    public function aUnePartie(): bool
     {
         return isset($_SESSION[self::GAME_KEY]);
     }
 
-    public function getGame(): ?array
+    public function obtenirPartie(): ?array
     {
         $game = $_SESSION[self::GAME_KEY] ?? null;
 
         if ($game !== null && (($game['version'] ?? 0) !== self::GAME_VERSION)) {
-            $this->clearGame();
+            $this->effacerPartie();
 
             return null;
         }
@@ -57,26 +57,26 @@ final class GameSessionService
         return $game;
     }
 
-    public function saveGame(array $game): void
+    public function sauvegarderPartie(array $game): void
     {
         $_SESSION[self::GAME_KEY] = $game;
     }
 
-    public function clearGame(): void
+    public function effacerPartie(): void
     {
         unset($_SESSION[self::GAME_KEY]);
     }
 
-    public function currentGamePage(): string
+    public function obtenirPageCouranteJeu(): string
     {
-        if (! $this->isAuthenticated()) {
-            return 'login';
+        if (! $this->estAuthentifie()) {
+            return 'connexion';
         }
 
-        $game = $this->getGame();
+        $game = $this->obtenirPartie();
 
         if ($game === null) {
-            return 'character';
+            return 'personnages';
         }
 
         if (($game['status'] ?? 'doors') === 'in_combat') {
@@ -84,30 +84,30 @@ final class GameSessionService
         }
 
         if (($game['status'] ?? 'doors') === 'finished') {
-            return 'end';
+            return 'fin';
         }
 
-        return 'doors';
+        return 'portes';
     }
 
-    public function startNewGame(CharacterDefinition $character): array
+    public function demarrerNouvellePartie(CharacterDefinition $character): array
     {
         $game = array(
             'version' => self::GAME_VERSION,
             'status' => 'doors',
-            'player' => $character->createState(),
-            'doors' => $this->generateDoors(),
+            'player' => $character->creerEtat(),
+            'doors' => $this->genererPortes(),
             'combat' => null,
             'result' => null,
             'feedback' => null,
         );
 
-        $this->saveGame($game);
+        $this->sauvegarderPartie($game);
 
         return $game;
     }
 
-    public function consumeFeedback(array &$game): ?array
+    public function consommerRetour(array &$game): ?array
     {
         $feedback = $game['feedback'] ?? null;
         $game['feedback'] = null;
@@ -115,7 +115,7 @@ final class GameSessionService
         return $feedback;
     }
 
-    private function generateDoors(): array
+    private function genererPortes(): array
     {
         $types = array('combat', 'bonus', 'bonus', 'malus', 'malus');
         $variantRoll = random_int(1, 10);
@@ -135,31 +135,31 @@ final class GameSessionService
                 'number' => $index + 1,
                 'type' => $type,
                 'opened' => false,
-                'effect' => $type === 'combat' ? null : $this->generateEffect($type),
+                'effect' => $type === 'combat' ? null : $this->genererEffet($type),
             );
         }
 
         return $doors;
     }
 
-    private function generateEffect(string $type): array
+    private function genererEffet(string $type): array
     {
         if ($type === 'bonus') {
             $effects = array(
-                array('mode' => 'heal', 'amount' => random_int(4, 7), 'headline' => 'Bol de lait'),
-                array('mode' => 'force', 'amount' => random_int(2, 4), 'headline' => 'Croquettes épiques'),
-                array('mode' => 'defense', 'amount' => random_int(2, 4), 'headline' => 'Coussin blindé'),
-                array('mode' => 'max_hp', 'amount' => random_int(3, 5), 'headline' => 'Sieste réparatrice'),
+                array('mode' => 'heal', 'amount' => random_int(4, 7), 'headline' => 'Smoothie vitamine'),
+                array('mode' => 'force', 'amount' => random_int(2, 4), 'headline' => 'Shot tropical'),
+                array('mode' => 'defense', 'amount' => random_int(2, 4), 'headline' => 'Peau renforcee'),
+                array('mode' => 'max_hp', 'amount' => random_int(3, 5), 'headline' => 'Reserve de jus'),
             );
 
             return $effects[array_rand($effects)];
         }
 
         $effects = array(
-            array('mode' => 'damage', 'amount' => random_int(3, 6), 'headline' => 'Piège à litière'),
-            array('mode' => 'force', 'amount' => -random_int(1, 3), 'headline' => 'Collier encombrant'),
-            array('mode' => 'defense', 'amount' => -random_int(1, 3), 'headline' => 'Bain humiliant'),
-            array('mode' => 'damage', 'amount' => random_int(2, 4), 'headline' => 'Aspiration surprise'),
+            array('mode' => 'damage', 'amount' => random_int(3, 6), 'headline' => 'Hachoir glissant'),
+            array('mode' => 'force', 'amount' => -random_int(1, 3), 'headline' => 'Gel du frigo'),
+            array('mode' => 'defense', 'amount' => -random_int(1, 3), 'headline' => 'Pelure fragile'),
+            array('mode' => 'damage', 'amount' => random_int(2, 4), 'headline' => 'Mixeur surprise'),
         );
 
         return $effects[array_rand($effects)];

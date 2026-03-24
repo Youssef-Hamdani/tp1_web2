@@ -8,46 +8,46 @@ use App\Services\CombatService;
 
 abstract class CharacterDefinition
 {
-    abstract public function getId(): string;
+    abstract public function obtenirId(): string;
 
-    abstract public function getName(): string;
+    abstract public function obtenirNom(): string;
 
-    abstract public function getTitle(): string;
+    abstract public function obtenirTitre(): string;
 
-    abstract public function getImagePath(): string;
+    abstract public function obtenirCheminImage(): string;
 
-    abstract public function getBaseForce(): int;
+    abstract public function obtenirForceBase(): int;
 
-    abstract public function getBaseDefense(): int;
+    abstract public function obtenirDefenseBase(): int;
 
-    abstract public function getBaseHp(): int;
+    abstract public function obtenirVieBase(): int;
 
-    abstract public function getPowerName(): string;
+    abstract public function obtenirNomPouvoir(): string;
 
-    abstract public function getPowerDescription(): string;
+    abstract public function obtenirDescriptionPouvoir(): string;
 
-    abstract protected function getInitialPowerState(): array;
+    abstract protected function obtenirEtatPouvoirInitial(): array;
 
-    abstract public function usePower(array &$player, array &$monster, CombatService $combatService): array;
+    abstract public function utiliserPouvoir(array &$player, array &$monster, CombatService $combatService): array;
 
-    public function createState(): array
+    public function creerEtat(): array
     {
         return array(
-            'character_id' => $this->getId(),
-            'name' => $this->getName(),
-            'title' => $this->getTitle(),
-            'image' => $this->getImagePath(),
-            'force' => $this->getBaseForce(),
-            'defense' => $this->getBaseDefense(),
-            'hp' => $this->getBaseHp(),
-            'max_hp' => $this->getBaseHp(),
-            'power_name' => $this->getPowerName(),
-            'power_description' => $this->getPowerDescription(),
-            'power_state' => $this->getInitialPowerState(),
+            'character_id' => $this->obtenirId(),
+            'name' => $this->obtenirNom(),
+            'title' => $this->obtenirTitre(),
+            'image' => $this->obtenirCheminImage(),
+            'force' => $this->obtenirForceBase(),
+            'defense' => $this->obtenirDefenseBase(),
+            'hp' => $this->obtenirVieBase(),
+            'max_hp' => $this->obtenirVieBase(),
+            'power_name' => $this->obtenirNomPouvoir(),
+            'power_description' => $this->obtenirDescriptionPouvoir(),
+            'power_state' => $this->obtenirEtatPouvoirInitial(),
         );
     }
 
-    public function canUsePower(array $player): bool
+    public function peutUtiliserPouvoir(array $player): bool
     {
         $powerState = $player['power_state'];
         $cooldown = (int) ($powerState['cooldown'] ?? 0);
@@ -63,26 +63,30 @@ abstract class CharacterDefinition
         return $player['hp'] > 0;
     }
 
-    public function getAttackBonus(array $player): int
+    public function obtenirBonusAttaque(array $player): int
     {
         return 0;
     }
 
-    public function getDefenseBonus(array $player): int
+    public function obtenirBonusDefense(array $player): int
     {
         return 0;
     }
 
-    public function afterRound(array &$player): void
+    public function apresTour(array &$player): void
     {
         foreach ($player['power_state'] as $key => $value) {
-            if (is_int($value) && $value > 0 && (strpos($key, '_turns') !== false || $key === 'cooldown')) {
+            if (! is_int($value) || $value <= 0) {
+                continue;
+            }
+
+            if (str_ends_with($key, '_tours') || $key === 'cooldown') {
                 $player['power_state'][$key]--;
             }
         }
     }
 
-    protected function buildLog(string $tone, string $text): array
+    protected function creerJournal(string $tone, string $text): array
     {
         return array(
             'tone' => $tone,
@@ -90,4 +94,3 @@ abstract class CharacterDefinition
         );
     }
 }
-

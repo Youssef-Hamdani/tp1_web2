@@ -1,24 +1,24 @@
 <section class="auth-shell">
     <header class="hero hero-center">
-        <div class="brand-mark">C</div>
-        <h1>Nuit des Neuf Vies</h1>
-        <p>Entrez dans le couloir interdit et guidez votre chat jusqu'au duel final.</p>
+        <div class="brand-mark">F</div>
+        <h1>Fruits en Furie</h1>
+        <p>Entrez dans l'arene du marche et menez votre fruit jusqu'au duel final.</p>
     </header>
 
     <section class="panel auth-panel">
         <div class="panel-heading">
             <h2>Connexion</h2>
-            <p>Accédez à votre compte pour choisir votre chat de combat.</p>
+            <p>Connectez-vous pour choisir votre combattant et ouvrir les portes.</p>
         </div>
 
         <?php if (! empty($error)) : ?>
-            <div class="notice notice-danger"><?= $ui->e($error) ?></div>
+            <div class="notice notice-danger"><?= $ui->echapper($error) ?></div>
         <?php endif; ?>
 
-        <form method="post" action="<?= $ui->e($ui->url('login')) ?>" class="stack">
+        <form method="post" action="<?= $ui->echapper($ui->lien('connexion')) ?>" class="stack">
             <label class="field">
                 <span>Nom d'utilisateur</span>
-                <input type="text" name="username" value="<?= $ui->e($old['username'] ?? '') ?>" autocomplete="username" required>
+                <input type="text" name="username" value="<?= $ui->echapper($old['username'] ?? '') ?>" autocomplete="username" required>
             </label>
 
             <label class="field">
@@ -31,7 +31,7 @@
 
         <p class="switch-link">
             Pas encore de compte?
-            <a href="<?= $ui->e($ui->url('register')) ?>">Créer un compte</a>
+            <a href="<?= $ui->echapper($ui->lien('inscription')) ?>">Creer un compte</a>
         </p>
     </section>
 </section>

@@ -1,24 +1,24 @@
 <section class="auth-shell">
     <header class="hero hero-center">
-        <div class="brand-mark">C</div>
-        <h1>Nuit des Neuf Vies</h1>
-        <p>Créez votre compte avant d'affronter les pièges et les chiens de garde.</p>
+        <div class="brand-mark">F</div>
+        <h1>Fruits en Furie</h1>
+        <p>Creez votre compte avant d'entrer dans le couloir des ingredients hostiles.</p>
     </header>
 
     <section class="panel auth-panel">
         <div class="panel-heading">
-            <h2>Créer un compte</h2>
-            <p>Votre progression de partie restera dans la session en cours.</p>
+            <h2>Creer un compte</h2>
+            <p>Votre progression reste dans la session active jusqu'a la fin du duel.</p>
         </div>
 
         <?php if (! empty($error)) : ?>
-            <div class="notice notice-danger"><?= $ui->e($error) ?></div>
+            <div class="notice notice-danger"><?= $ui->echapper($error) ?></div>
         <?php endif; ?>
 
-        <form method="post" action="<?= $ui->e($ui->url('register')) ?>" class="stack">
+        <form method="post" action="<?= $ui->echapper($ui->lien('inscription')) ?>" class="stack">
             <label class="field">
                 <span>Nom d'utilisateur</span>
-                <input type="text" name="username" value="<?= $ui->e($old['username'] ?? '') ?>" autocomplete="username" required>
+                <input type="text" name="username" value="<?= $ui->echapper($old['username'] ?? '') ?>" autocomplete="username" required>
             </label>
 
             <label class="field">
@@ -31,12 +31,12 @@
                 <input type="password" name="password_confirmation" autocomplete="new-password" required>
             </label>
 
-            <button type="submit" class="button button-primary button-block">Créer mon compte</button>
+            <button type="submit" class="button button-primary button-block">Creer mon compte</button>
         </form>
 
         <p class="switch-link">
-            Déjà inscrit?
-            <a href="<?= $ui->e($ui->url('login')) ?>">Se connecter</a>
+            Deja inscrit?
+            <a href="<?= $ui->echapper($ui->lien('connexion')) ?>">Se connecter</a>
         </p>
     </section>
 </section>

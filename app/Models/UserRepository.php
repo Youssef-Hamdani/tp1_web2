@@ -15,7 +15,7 @@ final class UserRepository
         $this->pdo = $pdo;
     }
 
-    public function findByUsername(string $username): ?User
+    public function trouverParNomUtilisateur(string $username): ?User
     {
         $statement = $this->pdo->prepare('SELECT id, username, password_hash FROM users WHERE username = :username LIMIT 1');
         $statement->execute(array('username' => $username));
@@ -28,7 +28,7 @@ final class UserRepository
         return new User((int) $row['id'], (string) $row['username'], (string) $row['password_hash']);
     }
 
-    public function create(string $username, string $passwordHash): User
+    public function creer(string $username, string $passwordHash): User
     {
         $statement = $this->pdo->prepare('INSERT INTO users (username, password_hash) VALUES (:username, :password_hash)');
         $statement->execute(
@@ -41,4 +41,3 @@ final class UserRepository
         return new User((int) $this->pdo->lastInsertId(), $username, $passwordHash);
     }
 }
-

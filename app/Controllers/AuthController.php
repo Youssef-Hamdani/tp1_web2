@@ -24,11 +24,11 @@ final class AuthController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function showLogin(array $data = array()): void
+    public function afficherConnexion(array $data = array()): void
     {
-        $this->requireGuest();
+        $this->exigerInvite();
 
-        $this->render(
+        $this->afficherVue(
             'auth.login',
             array_merge(
                 array(
@@ -40,15 +40,15 @@ final class AuthController extends Controller
         );
     }
 
-    public function login(): void
+    public function traiterConnexion(): void
     {
-        $this->requireGuest();
+        $this->exigerInvite();
 
         $username = trim((string) ($_POST['username'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
         if ($username === '' || $password === '') {
-            $this->showLogin(
+            $this->afficherConnexion(
                 array(
                     'error' => 'Veuillez remplir tous les champs.',
                     'old' => array('username' => $username),
@@ -58,10 +58,10 @@ final class AuthController extends Controller
             return;
         }
 
-        $user = $this->userRepository->findByUsername($username);
+        $user = $this->userRepository->trouverParNomUtilisateur($username);
 
-        if ($user === null || ! password_verify($password, $user->getPasswordHash())) {
-            $this->showLogin(
+        if ($user === null || ! password_verify($password, $user->obtenirMotDePasseHache())) {
+            $this->afficherConnexion(
                 array(
                     'error' => 'Nom d\'utilisateur ou mot de passe invalide.',
                     'old' => array('username' => $username),
@@ -71,20 +71,20 @@ final class AuthController extends Controller
             return;
         }
 
-        $this->gameSession->login($user);
-        $this->flash->add('success', sprintf('Bon retour, %s.', $user->getUsername()));
-        $this->redirect($this->gameSession->currentGamePage());
+        $this->gameSession->ouvrirSessionUtilisateur($user);
+        $this->flash->ajouter('success', sprintf('Bon retour, %s.', $user->obtenirNomUtilisateur()));
+        $this->rediriger($this->gameSession->obtenirPageCouranteJeu());
     }
 
-    public function showRegister(array $data = array()): void
+    public function afficherInscription(array $data = array()): void
     {
-        $this->requireGuest();
+        $this->exigerInvite();
 
-        $this->render(
+        $this->afficherVue(
             'auth.register',
             array_merge(
                 array(
-                    'title' => 'Créer un compte',
+                    'title' => 'Creer un compte',
                     'old' => array('username' => ''),
                 ),
                 $data
@@ -92,16 +92,16 @@ final class AuthController extends Controller
         );
     }
 
-    public function register(): void
+    public function traiterInscription(): void
     {
-        $this->requireGuest();
+        $this->exigerInvite();
 
         $username = trim((string) ($_POST['username'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
         $confirmation = (string) ($_POST['password_confirmation'] ?? '');
 
         if ($username === '' || $password === '' || $confirmation === '') {
-            $this->showRegister(
+            $this->afficherInscription(
                 array(
                     'error' => 'Veuillez remplir tous les champs.',
                     'old' => array('username' => $username),
@@ -112,9 +112,9 @@ final class AuthController extends Controller
         }
 
         if (mb_strlen($username) < 3) {
-            $this->showRegister(
+            $this->afficherInscription(
                 array(
-                    'error' => 'Le nom d\'utilisateur doit contenir au moins 3 caractères.',
+                    'error' => 'Le nom d\'utilisateur doit contenir au moins 3 caracteres.',
                     'old' => array('username' => $username),
                 )
             );
@@ -123,7 +123,7 @@ final class AuthController extends Controller
         }
 
         if ($password !== $confirmation) {
-            $this->showRegister(
+            $this->afficherInscription(
                 array(
                     'error' => 'Les mots de passe ne correspondent pas.',
                     'old' => array('username' => $username),
@@ -133,10 +133,10 @@ final class AuthController extends Controller
             return;
         }
 
-        if ($this->userRepository->findByUsername($username) !== null) {
-            $this->showRegister(
+        if ($this->userRepository->trouverParNomUtilisateur($username) !== null) {
+            $this->afficherInscription(
                 array(
-                    'error' => 'Un compte existe déjà avec ce nom d\'utilisateur.',
+                    'error' => 'Un compte existe deja avec ce nom d\'utilisateur.',
                     'old' => array('username' => $username),
                 )
             );
@@ -144,17 +144,17 @@ final class AuthController extends Controller
             return;
         }
 
-        $user = $this->userRepository->create($username, password_hash($password, PASSWORD_DEFAULT));
-        $this->gameSession->login($user);
-        $this->flash->add('success', 'Compte créé avec succès.');
-        $this->redirect('character');
+        $user = $this->userRepository->creer($username, password_hash($password, PASSWORD_DEFAULT));
+        $this->gameSession->ouvrirSessionUtilisateur($user);
+        $this->flash->ajouter('success', 'Compte cree avec succes.');
+        $this->rediriger('personnages');
     }
 
-    public function logout(): void
+    public function deconnecter(): void
     {
-        $this->requireAuthentication();
-        $this->gameSession->logout();
-        $this->flash->add('success', 'Vous avez été déconnecté.');
-        $this->redirect('login');
+        $this->exigerAuthentification();
+        $this->gameSession->fermerSessionUtilisateur();
+        $this->flash->ajouter('success', 'Vous avez ete deconnecte.');
+        $this->rediriger('connexion');
     }
 }

@@ -1,42 +1,42 @@
 <section class="hero">
     <div>
         <div class="brand-line">
-            <div class="brand-mark">C</div>
+            <div class="brand-mark">F</div>
             <div>
-                <h1>Nuit des Neuf Vies</h1>
-                <p>Choisissez votre gardien nocturne</p>
+                <h1>Fruits en Furie</h1>
+                <p>Choisissez votre fruit de combat</p>
             </div>
         </div>
     </div>
 
-    <form method="post" action="<?= $ui->e($ui->url('logout')) ?>">
-        <button type="submit" class="button button-ghost">Déconnexion</button>
+    <form method="post" action="<?= $ui->echapper($ui->lien('deconnexion')) ?>">
+        <button type="submit" class="button button-ghost">Deconnexion</button>
     </form>
 </section>
 
 <section class="panel game-panel">
     <div class="panel-heading">
-        <h2>Personnage</h2>
-        <p>Sélectionnez une classe avec un pouvoir distinct avant d'ouvrir les portes.</p>
+        <h2>Equipe de fruits</h2>
+        <p>Chaque fruit a un pouvoir special. Choisissez-en un avant d'ouvrir les portes.</p>
     </div>
 
-    <form method="post" action="<?= $ui->e($ui->url('character')) ?>" class="stack">
+    <form method="post" action="<?= $ui->echapper($ui->lien('personnages')) ?>" class="stack">
         <div class="choice-grid choice-grid-characters">
             <?php $first = true; ?>
             <?php foreach ($characters as $character) : ?>
                 <label class="choice-card">
-                    <input type="radio" name="character_id" value="<?= $ui->e($character->getId()) ?>" <?= $first ? 'checked' : '' ?>>
+                    <input type="radio" name="character_id" value="<?= $ui->echapper($character->obtenirId()) ?>" <?= $first ? 'checked' : '' ?>>
                     <span class="choice-card-body">
-                        <img src="<?= $ui->e($ui->asset($character->getImagePath())) ?>" alt="<?= $ui->e($character->getName()) ?>" class="avatar avatar-large">
-                        <strong><?= $ui->e($character->getName()) ?></strong>
-                        <span><?= $ui->e($character->getTitle()) ?></span>
-                        <small><?= $ui->e($character->getPowerName()) ?>: <?= $ui->e($character->getPowerDescription()) ?></small>
+                        <img src="<?= $ui->echapper($ui->ressource($character->obtenirCheminImage())) ?>" alt="<?= $ui->echapper($character->obtenirNom()) ?>" class="avatar avatar-large">
+                        <strong><?= $ui->echapper($character->obtenirNom()) ?></strong>
+                        <span><?= $ui->echapper($character->obtenirTitre()) ?></span>
+                        <small><?= $ui->echapper($character->obtenirNomPouvoir()) ?>: <?= $ui->echapper($character->obtenirDescriptionPouvoir()) ?></small>
                     </span>
                 </label>
                 <?php $first = false; ?>
             <?php endforeach; ?>
         </div>
 
-        <button type="submit" class="button button-primary button-block">Choisir</button>
+        <button type="submit" class="button button-primary button-block">Choisir ce fruit</button>
     </form>
 </section>
